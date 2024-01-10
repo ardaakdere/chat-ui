@@ -304,6 +304,8 @@ export async function POST({ request, locals, params, getClientAddress }) {
 			} catch (e) {
 				update({ type: "status", status: "error", message: (e as Error).message });
 			}
+			await summarizeIfNeeded;
+			
 			await collections.conversations.updateOne(
 				{
 					_id: convId,
@@ -322,7 +324,6 @@ export async function POST({ request, locals, params, getClientAddress }) {
 				text: messages[messages.length - 1].content,
 			});
 
-			await summarizeIfNeeded;
 			return;
 		},
 		async cancel() {
